@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Management</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        h1, h2 { border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+        div { margin-bottom: 10px; }
+        label { display: inline-block; width: 120px; }
+        input[type="text"], select { width: 200px; padding: 5px; margin-bottom: 10px; }
+        input[type="submit"], button { padding: 8px 15px; margin-top: 5px; }
+        .container { margin-bottom: 30px; padding: 15px; border: 1px solid #eee; border-radius: 5px; }
+        #results { margin-top: 20px; padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+
+<h1>Task Management</h1>
+
+<!-- Get All Tasks -->
+<div class="container">
+    <h2>Get All Tasks</h2>
+    <button onclick="fetchAllTasks()">Fetch All Tasks</button>
+</div>
+
+<!-- Get Task By Name -->
+<div class="container">
+    <h2>Get Task By Name</h2>
+    <form id="getTaskByNameForm">
+        <div>
+            <label for="getName">Name:</label>
+            <input type="text" id="getName" name="name" required>
+        </div>
+        <input type="submit" value="Get Task">
+    </form>
+</div>
+
+<!-- Get Task By Priority -->
+<div class="container">
+    <h2>Get Task By Priority</h2>
+    <form id="getTaskByPriorityForm">
+        <div>
+            <label for="getPriority">Priority:</label>
+            <select id="getPriority" name="priority">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Vital">Vital</option>
+            </select>
+        </div>
+        <input type="submit" value="Get Tasks by Priority">
+    </form>
+</div>
+
+<!-- Add Task -->
+<div class="container">
+    <h2>Add New Task</h2>
+    <form id="addTaskForm">
+        <div>
+            <label for="addName">Name:</label>
+            <input type="text" id="addName" name="name" required>
+        </div>
+        <div>
+            <label for="addDescription">Description:</label>
+            <input type="text" id="addDescription" name="description" required>
+        </div>
+        <div>
+            <label for="addPriority">Priority:</label>
+            <select id="addPriority" name="priority">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Vital">Vital</option>
+            </select>
+        </div>
+        <input type="submit" value="Add Task">
+    </form>
+</div>
+
+<!-- Update Task -->
+<div class="container">
+    <h2>Update Task</h2>
+    <form id="updateTaskForm">
+        <div>
+            <label for="updateTaskName">Task Name to Update:</label>
+            <input type="text" id="updateTaskName" name="taskName" required placeholder="Enter current name of the task">
+        </div>
+        <hr>
+        <div>
+            <label for="updateName">New Name:</label>
+            <input type="text" id="updateName" name="name">
+        </div>
+        <div>
+            <label for="updateDescription">New Description:</label>
+            <input type="text" id="updateDescription" name="description">
+        </div>
+        <div>
+            <label for="updatePriority">New Priority:</label>
+            <select id="updatePriority" name="priority">
+                <option value="">--Select New Priority--</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Vital">Vital</option>
+            </select>
+        </div>
+        <input type="submit" value="Update Task">
+    </form>
+</div>
+
+<!-- Delete Task -->
+<div class="container">
+    <h2>Delete Task</h2>
+    <form id="deleteTaskForm">
+        <div>
+            <label for="deleteName">Name:</label>
+            <input type="text" id="deleteName" name="name" required>
+        </div>
+        <input type="submit" value="Delete Task">
+    </form>
+</div>
+
+<div id="results">
+    <!-- Results will be displayed here -->
+</div>
+
+<script>
+    const resultsDiv = document.getElementById('results');
+
+    // Fetch All Tasks
+    async function fetchAllTasks() {
+        try {
+            const response = await fetch('/tasks');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            resultsDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        } catch (error) {
+            resultsDiv.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+        }
+    }
+
+    // Get Task By Name
+    document.getElementById('getTaskByNameForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const name = document.getElementById('getName').value;
+        try {
+            const response = await fetch(`/tasks/byName/${name}`);
+            if (!response.ok) {
+                if (response.status === 404) {
+                     resultsDiv.innerHTML = `<p style="color:red;">Task with name '${name}' not found.</p>`;
+                     return;
+                }
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            resultsDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        } catch (error) {
+            resultsDiv.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+        }
+    });
+
+    // Get Task By Priority
+    document.getElementById('getTaskByPriorityForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const priority = document.getElementById('getPriority').value;
+        try {
+            const response = await fetch(`/tasks/byPriority/${priority}`);
+             if (!response.ok) {
+                if (response.status === 404) {
+                     resultsDiv.innerHTML = `<p style="color:red;">No tasks found with priority '${priority}'.</p>`;
+                     return;
+                }
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            resultsDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        } catch (error) {
+            resultsDiv.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+        }
+    });
+
+    // Add Task
+    document.getElementById('addTaskForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const name = document.getElementById('addName').value;
+        const description = document.getElementById('addDescription').value;
+        const priority = document.getElementById('addPriority').value;
+        try {
+            const response = await fetch('/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ name, description, priority })
+            });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            resultsDiv.innerHTML = `<p>Task added successfully!</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            fetchAllTasks(); // Refresh list
+        } catch (error) {
+            resultsDiv.innerHTML = `<p style="color:red;">Error adding task: ${error.message}</p>`;
+        }
+    });
+
+    // Update Task
+    document.getElementById('updateTaskForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const taskName = document.getElementById('updateTaskName').value;
+        const name = document.getElementById('updateName').value;
+        const description = document.getElementById('updateDescription').value;
+        const priority = document.getElementById('updatePriority').value;
+
+        const bodyPayload = {};
+        if (name) bodyPayload.name = name;
+        if (description) bodyPayload.description = description;
+        if (priority) bodyPayload.priority = priority;
+
+        if (Object.keys(bodyPayload).length === 0) {
+            resultsDiv.innerHTML = '<p style="color:orange;">Please provide at least one field to update.</p>';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/tasks/${taskName}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(bodyPayload)
+            });
+            if (!response.ok) {
+                 if (response.status === 404) {
+                     resultsDiv.innerHTML = `<p style="color:red;">Task with name '${taskName}' not found for update.</p>`;
+                     return;
+                }
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            resultsDiv.innerHTML = `<p>Task updated successfully!</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            fetchAllTasks(); // Refresh list
+        } catch (error) {
+            resultsDiv.innerHTML = `<p style="color:red;">Error updating task: ${error.message}</p>`;
+        }
+    });
+
+    // Delete Task
+    document.getElementById('deleteTaskForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const name = document.getElementById('deleteName').value;
+        try {
+            const response = await fetch(`/tasks/${name}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                 if (response.status === 404) {
+                     resultsDiv.innerHTML = `<p style="color:red;">Task with name '${name}' not found for deletion.</p>`;
+                     return;
+                }
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            // Ktor usually returns 200 OK with "true" or "false" in the body for delete operations based on your example
+            // If it returns no content (204), response.text() or response.json() might fail.
+            // Adjust based on actual server response for DELETE.
+            const success = await response.text(); // Assuming server sends "true" or "false" as text
+            if (success === "true") {
+                 resultsDiv.innerHTML = `<p>Task '${name}' deleted successfully.</p>`;
+                 fetchAllTasks(); // Refresh list
+            } else {
+                 resultsDiv.innerHTML = `<p style="color:orange;">Could not delete task '${name}'. It might not exist.</p>`;
+            }
+
+        } catch (error) {
+            resultsDiv.innerHTML = `<p style="color:red;">Error deleting task: ${error.message}</p>`;
+        }
+    });
+
+</script>
+
+</body>
+</html>
