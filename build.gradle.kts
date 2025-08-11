@@ -12,6 +12,10 @@ application {
     mainClass = "io.ktor.server.netty.EngineMain"
 }
 
+ktor {
+    // development mode can be specified by application.yaml properties using 'ktor.development' property
+//    development = true
+}
 dependencies {
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
@@ -42,6 +46,12 @@ dependencies {
 
     // dependency injection
     implementation(libs.ktor.server.di)
+    // cros
+    implementation(libs.ktor.server.cros)
+////     sel signed ssl certification
+//    implementation(libs.ktor.network.tsl.certificates)
+    // logging:
+    implementation(libs.ktor.server.call.logging)
 
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)

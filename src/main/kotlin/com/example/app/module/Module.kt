@@ -2,14 +2,16 @@ package com.example.app.module
 
 import com.example.app.plugins.database.configureDatabase
 import com.example.app.plugins.di.di
+import com.example.app.plugins.logging.configureRequestLogging
 import com.example.app.plugins.routing.configureRouting
 import com.example.app.plugins.serialization.configureSerialization
 import com.example.app.plugins.status_pages.configureStatusPages
 import com.example.app.plugins.websocket.configureWebSocket
-import com.example.data.repository.FakeTaskRepository
-import com.example.data.repository.TaskRepository
 import io.ktor.server.application.Application
-import io.ktor.server.plugins.di.dependencies
+import io.ktor.server.application.createRouteScopedPlugin
+import io.ktor.server.application.install
+import io.ktor.server.request.uri
+import io.ktor.util.logging.KtorSimpleLogger
 
 /**
  * ## Documentation:
@@ -22,6 +24,7 @@ import io.ktor.server.plugins.di.dependencies
  * - we set plugins configurations and routing configurations
  * - configurations order matters here, routing should be the last in most cases, eg [configureWebSocket]
  * should be before [configureRouting] cause routing uses the web socket within itself
+ * - plugins can be installed within a route not for everyting
  *
  * ## Note
  * this module should be one of the ktor.application.module paths, for this one it is
@@ -43,6 +46,6 @@ fun Application.module() {
     configureSerialization()
     configureStatusPages()
     configureDatabase()
-
+    configureRequestLogging()
     configureRouting()
 }

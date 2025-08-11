@@ -1,4 +1,6 @@
 ktor:
+#  development: true # enable development mode, or in build.gradle.kts in ktor scope
+
   application:
     modules:
       # here we mention modules that are in the app, multiple values are possible
