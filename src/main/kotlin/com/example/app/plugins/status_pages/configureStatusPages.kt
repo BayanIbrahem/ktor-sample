@@ -1,4 +1,4 @@
-package com.example.app.module.status_pages
+package com.example.app.plugins.status_pages
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application

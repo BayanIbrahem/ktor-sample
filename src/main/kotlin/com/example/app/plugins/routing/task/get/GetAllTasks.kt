@@ -1,12 +1,12 @@
-package com.example.app.module.routing.task.get
+package com.example.app.plugins.routing.task.get
 
 import com.example.data.repository.TaskRepository
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 
-fun Route.getAllTasks() {
+fun Route.getAllTasks(repository: TaskRepository) {
     get("/all") {
-        call.respond(TaskRepository.allTasks())
+        call.respond(repository.allTasks())
     }
 }

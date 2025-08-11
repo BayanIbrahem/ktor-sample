@@ -1,4 +1,4 @@
-package com.example.app.module.routing.task.get
+package com.example.app.plugins.routing.task.get
 
 import com.example.data.repository.TaskRepository
 import com.example.model.Priority
@@ -7,7 +7,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 
-fun Route.getTaskByPriority() {
+fun Route.getTaskByPriority(repository: TaskRepository) {
     get("/byPriority/{priority?}") {
         val priority = call.parameters["priority"]?.let { priority ->
             Priority.entries.firstOrNull { it.name == priority }
@@ -16,7 +16,7 @@ fun Route.getTaskByPriority() {
             call.respond(HttpStatusCode.BadRequest)
             return@get
         }
-        val tasks = TaskRepository.tasksByPriority(priority)
+        val tasks = repository.tasksByPriority(priority)
         call.respond(tasks)
     }
 }

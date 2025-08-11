@@ -1,7 +1,7 @@
-import com.example.app.module.routing.configureRouting
-import com.example.app.module.serialization.configureSerialization
-import com.example.app.module.websocket.configureWebSocket
-import com.example.data.repository.TaskRepository
+import com.example.app.plugins.routing.configureRouting
+import com.example.app.plugins.serialization.configureSerialization
+import com.example.app.plugins.websocket.configureWebSocket
+import com.example.data.repository.FakeTaskRepository
 import com.example.model.Priority
 import com.example.model.Task
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -26,7 +26,7 @@ class WebSocketTest {
         application {
             configureWebSocket()
             configureSerialization()
-            configureRouting()
+            configureRouting(FakeTaskRepository)
         }
 
         val client = createClient {
@@ -45,7 +45,7 @@ class WebSocketTest {
             Task("shopping", "Buy the groceries", Priority.High),
             Task("painting", "Paint the fence", Priority.Medium)
         )
-        expectedTasks.forEach(TaskRepository::addTask)
+        expectedTasks.forEach(FakeTaskRepository::addTask)
 
         var actualTasks = emptyList<Task>()
 

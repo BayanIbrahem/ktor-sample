@@ -1,7 +1,8 @@
-package com.example.app.module.routing
+package com.example.app.plugins.routing
 
-import com.example.app.module.routing.form.taskForm
-import com.example.app.module.routing.task.taskRouting
+import com.example.app.plugins.routing.form.taskForm
+import com.example.app.plugins.routing.task.taskRouting
+import com.example.data.repository.TaskRepository
 import io.ktor.http.ContentType
 import io.ktor.server.application.Application
 import io.ktor.server.response.respondText
@@ -9,9 +10,9 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 
-fun Application.configureRouting() {
+fun Application.configureRouting(repository: TaskRepository) {
     routing {
-        taskRouting()
+        taskRouting(repository)
 
         taskForm()
 

@@ -1,5 +1,6 @@
-package com.example.app.module.serialization
+package com.example.app.plugins.serialization
 
+import com.example.data.repository.TaskRepository
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install

@@ -1,4 +1,4 @@
-package com.example.app.module.websocket
+package com.example.app.plugins.websocket
 
 import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
 import io.ktor.server.application.Application

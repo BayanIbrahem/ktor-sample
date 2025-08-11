@@ -1,4 +1,4 @@
-package com.example.app.module.routing.form
+package com.example.app.plugins.routing.form
 
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.routing.Routing

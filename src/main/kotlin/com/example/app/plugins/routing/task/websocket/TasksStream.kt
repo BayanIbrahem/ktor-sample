@@ -1,4 +1,4 @@
-package com.example.app.module.routing.task.websocket
+package com.example.app.plugins.routing.task.websocket
 
 import com.example.data.repository.TaskRepository
 import com.example.model.Task
@@ -12,20 +12,20 @@ import kotlinx.coroutines.delay
 import java.util.Collections
 import kotlin.time.Duration.Companion.seconds
 
-fun Route.tasksStream() {
+fun Route.tasksStream(repository: TaskRepository) {
     val sessions = Collections.synchronizedList<WebSocketServerSession>(
         // should be a mutable list here
         ArrayList()
     )
     webSocket("/stream/outbound") {
-        sendAllTasks()
+        sendAllTasks(repository)
     }
     webSocket("/stream/inbound") {
         sessions.add(this)
-        sendAllTasks()
+        sendAllTasks(repository)
         while (true) {
             val newTask = receiveDeserialized<Task>()
-            TaskRepository.addTask(newTask)
+            repository.addTask(newTask)
             sessions.forEach { session ->
                 session.sendSerialized(newTask)
             }
@@ -33,8 +33,8 @@ fun Route.tasksStream() {
     }
 }
 
-private suspend fun DefaultWebSocketServerSession.sendAllTasks() {
-    TaskRepository.allTasks().forEach { task ->
+private suspend fun DefaultWebSocketServerSession.sendAllTasks(repository: TaskRepository) {
+    repository.allTasks().forEach { task ->
         sendSerialized(task)
         delay(3.seconds)
     }
