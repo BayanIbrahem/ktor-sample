@@ -52,6 +52,8 @@ dependencies {
 //    implementation(libs.ktor.network.tsl.certificates)
     // logging:
     implementation(libs.ktor.server.call.logging)
+    // type safe routes:
+    implementation(libs.ktor.server.resources)
 
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)

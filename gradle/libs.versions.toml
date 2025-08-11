@@ -31,6 +31,7 @@ ktor-server-di = { group = "io.ktor", name = "ktor-server-di", version.ref = "kt
 ktor-server-cros = { group = "io.ktor", name = "ktor-server-cors", version.ref = "ktor-version" }
 ktor-network-tsl-certificates = { group = "io.ktor", name = "ktor-network-tls-certificates", version.ref = "ktor-version" }
 ktor-server-call-logging = {group = "io.ktor", name = "ktor-server-call-logging", version.ref = "ktor-version"}
+ktor-server-resources = {group = "io.ktor", name = "ktor-server-resources", version.ref = "ktor-version"}
 
 
 

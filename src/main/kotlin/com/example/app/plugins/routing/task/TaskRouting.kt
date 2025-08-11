@@ -11,6 +11,7 @@ import com.example.app.plugins.routing.task.post.addTask
 import com.example.app.plugins.routing.task.update.updateTask
 import com.example.app.plugins.routing.task.websocket.tasksStream
 import com.example.data.repository.TaskRepository
+import io.ktor.http.HttpMethod
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.route
 
