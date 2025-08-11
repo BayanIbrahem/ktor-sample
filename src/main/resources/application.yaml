@@ -1,6 +1,38 @@
 ktor:
-    application:
-        modules:
-            - com.example.app.ApplicationKt.module
-    deployment:
-        port: 8001
+  application:
+    modules:
+      # here we mention modules that are in the app, multiple values are possible
+      - com.example.app.module.ModuleKt.module
+    ## see gradle properties for other options
+  deployment:
+    port: 8001 # set 0 for random port
+    ## we can use environment variables using the ${ENV} /$ENV syntax
+    ## port: ${ENV_PORT}
+
+#    host: 0.0.0.0
+#    sslPort: 8888 # set 0 for random port - require other ssl configurations
+#    watch: # watch certain paths for auto reload for development mode
+#      - classes
+#      - resources
+#    rootPath: / # A servlet context path.#
+#    shutdown:
+#      url: my_url #uses Shutdown url plugin
+#    shutdownGracePeriod: 1000 # A maximum time in milliseconds for a server to stop accepting new requests.
+#    shutdownTimeout: 1000 # A maximum time in milliseconds to wait until the server stops completely.
+#    callGroupSize: 10 # A minimum size of a thread pool used to process application calls.
+#    connectionGroupSize: 10 # A count of threads used to accept new connections and start call processing.
+#    workerGroupSize: 10 # A size of the event group for processing connections, parsing messages, and doing the engine's internal work.
+
+#  security: # ssPort require this block
+#    ssl:
+#      keyStore: keystore.jks
+#      keyAlias: sampleAlias
+#      keyStorePassword: foobar
+#      privateKeyPassword: foobar
+
+## outside ktor block
+#jwt:
+#  secret: "secret"
+#  issuer: "http://0.0.0.0:8080/"
+#  audience: "http://0.0.0.0:8080/hello"
+#  realm: "Access to 'hello'"
