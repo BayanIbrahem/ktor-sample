@@ -4,6 +4,9 @@ import com.example.app.plugins.rate_limit.PROTECTED_RATE_LIMIT_NAME
 import com.example.app.plugins.routing.form.taskForm
 import com.example.app.plugins.routing.task.taskRouting
 import com.example.data.repository.TaskRepository
+import com.sun.tools.jdeprscan.Main.call
+import io.ktor.http.ContentDisposition
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
@@ -12,6 +15,7 @@ import io.ktor.resources.href
 import io.ktor.resources.serialization.ResourcesFormat
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
+import io.ktor.server.http.content.LocalPathContent
 import io.ktor.server.plugins.di.dependencies
 import io.ktor.server.plugins.ratelimit.rateLimit
 import io.ktor.server.request.receiveChannel
@@ -21,6 +25,11 @@ import io.ktor.server.resources.Resources
 import io.ktor.server.resources.delete
 import io.ktor.server.resources.get
 import io.ktor.server.resources.put
+import io.ktor.server.response.etag
+import io.ktor.server.response.header
+import io.ktor.server.response.respond
+import io.ktor.server.response.respondFile
+import io.ktor.server.response.respondRedirect
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.Routing
@@ -30,6 +39,7 @@ import io.ktor.server.routing.routing
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyAndClose
 import java.io.File
+import java.nio.file.Path
 import io.ktor.server.resources.post as rpost
 
 /**
@@ -199,6 +209,49 @@ private fun Route.otherRouting() {
 
         call.respondText("$fileDescription is uploaded to 'uploads/$fileName'")
     }
+    // response with file:
+    get("/download") {
+        val file = File("files/ktor_logo.png")
+        call.response.header(
+            name = HttpHeaders.ContentDisposition,
+            value = ContentDisposition.Attachment.withParameter(
+                key = ContentDisposition.Parameters.FileName,
+                value = "ktor_logo.png"
+            ).toString()
+        )
+        call.respondFile(file)
+    }
+    // response with file path:
+    get("/downloadFromPath") {
+        val filePath = Path.of("files/file.txt")
+        call.response.header(
+            name = HttpHeaders.ContentDisposition,
+            value = ContentDisposition.Attachment.withParameter(
+                key = ContentDisposition.Parameters.FileName,
+                value = "file.txt"
+            ).toString()
+        )
+        call.respond(LocalPathContent(filePath))
+    }
+    // assign headers:
+    // to install date and time we can use DefaultHeaders Plugin
+    get {
+        call.response.headers.append(HttpHeaders.ETag, "7c876b7e")
+        call.response.header(HttpHeaders.ETag, "7c876b7e")
+        call.response.etag("7c876b7e")
+        call.response.header("Custom-Header", "Some value")
+    }
+    // assign cookies:
+    get {
+        call.response.cookies.append("yummy_cookie", "choco")
+    }
+    // redirect:
+    get("/") {
+        call.respondRedirect("/moved", permanent = true)
+    }
+    get("/moved") {
+        call.respondText("Moved content")
+    }
 }
 
 fun Route.rateLimitEndpoint() {
@@ -207,5 +260,4 @@ fun Route.rateLimitEndpoint() {
 
         }
     }
-
 }
