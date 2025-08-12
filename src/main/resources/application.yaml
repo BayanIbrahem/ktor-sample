@@ -33,8 +33,12 @@ ktor:
 #      privateKeyPassword: foobar
 
 ## outside ktor block
-#jwt:
-#  secret: "secret"
-#  issuer: "http://0.0.0.0:8080/"
-#  audience: "http://0.0.0.0:8080/hello"
-#  realm: "Access to 'hello'"
+jwt:
+  ## should be stored in environment variables not in this file
+  ## HS 256
+  secret: "secret"
+  ## RS 256
+  privateKey: "some_long_private_key"
+  issuer: "http://0.0.0.0:8080/"
+  audience: "http://0.0.0.0:8080/hello"
+  realm: "Access to 'hello'"

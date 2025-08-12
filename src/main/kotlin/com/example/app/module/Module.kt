@@ -1,5 +1,6 @@
 package com.example.app.module
 
+import com.example.app.plugins.auth.configureAuthentication
 import com.example.app.plugins.database.configureDatabase
 import com.example.app.plugins.di.di
 import com.example.app.plugins.double_receive.configureDoubleReceive
@@ -51,6 +52,7 @@ fun Application.module() {
     configureRequestLogging()
     configureRateLimit()
 //    configureDoubleReceive()
+    configureAuthentication()
 
     configureRouting()
 }

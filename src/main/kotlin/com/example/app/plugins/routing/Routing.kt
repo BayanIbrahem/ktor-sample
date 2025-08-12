@@ -1,10 +1,13 @@
 package com.example.app.plugins.routing
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.example.app.plugins.auth.AUTHENTICATION_BASIC
+import com.example.app.plugins.auth.AUTHENTICATION_JWT
 import com.example.app.plugins.rate_limit.PROTECTED_RATE_LIMIT_NAME
 import com.example.app.plugins.routing.form.taskForm
 import com.example.app.plugins.routing.task.taskRouting
 import com.example.data.repository.TaskRepository
-import com.sun.tools.jdeprscan.Main.call
 import io.ktor.http.ContentDisposition
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
@@ -15,9 +18,14 @@ import io.ktor.resources.href
 import io.ktor.resources.serialization.ResourcesFormat
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
+import io.ktor.server.auth.AuthenticationStrategy
+import io.ktor.server.auth.UserIdPrincipal
+import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.principal
 import io.ktor.server.http.content.LocalPathContent
 import io.ktor.server.plugins.di.dependencies
 import io.ktor.server.plugins.ratelimit.rateLimit
+import io.ktor.server.request.receive
 import io.ktor.server.request.receiveChannel
 import io.ktor.server.request.receiveMultipart
 import io.ktor.server.request.receiveParameters
@@ -38,8 +46,10 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyAndClose
+import org.h2.engine.User
 import java.io.File
 import java.nio.file.Path
+import java.util.Date
 import io.ktor.server.resources.post as rpost
 
 /**
@@ -258,6 +268,46 @@ fun Route.rateLimitEndpoint() {
     get("/my_expensive_request") {
         rateLimit(PROTECTED_RATE_LIMIT_NAME) {
 
+        }
+    }
+}
+
+fun Route.basicAuthEndpoint() {
+    authenticate(
+        AUTHENTICATION_BASIC,
+        strategy = AuthenticationStrategy.Required
+    ) {
+        post("/login") {
+            val principal = call.principal<UserIdPrincipal>() ?: return@post
+            principal.name
+
+            authenticate(
+                "my-nested-auth-provider",
+                strategy = AuthenticationStrategy.Required
+            ) {
+                post("/nested") {
+                    val nestedAuthenticationPrincipal = call.principal<UserIdPrincipal>(
+                        "my-nested-auth-provider"
+                    )
+                }
+            }
+        }
+    }
+    authenticate(AUTHENTICATION_JWT) {
+        post("/login") {
+            val secret = environment.config.property("jwt.secret").getString()
+            val issuer = environment.config.property("jwt.issuer").getString()
+            val audience = environment.config.property("jwt.audience").getString()
+
+//            val user = call.receive<MyUser>()
+            // Check username and password
+            val token = JWT.create()
+                .withAudience(audience)
+                .withIssuer(issuer)
+                .withClaim("username", "my user name")
+                .withExpiresAt(Date(System.currentTimeMillis() + 60_000))
+                .sign(Algorithm.HMAC256(secret))
+            call.respond(hashMapOf("token" to token))
         }
     }
 }

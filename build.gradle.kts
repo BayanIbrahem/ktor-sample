@@ -58,6 +58,11 @@ dependencies {
     implementation(libs.ktor.server.rate.limit)
     // double receive to be able to get response body more than once (like when we need it for the logger)
     implementation(libs.ktor.server.double.receive)
+    // auth:
+    implementation(libs.ktor.server.auth)
+    // jwt tokens:
+    implementation(libs.ktor.server.auth.jwt)
+
 
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
