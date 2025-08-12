@@ -2,7 +2,9 @@ package com.example.app.module
 
 import com.example.app.plugins.database.configureDatabase
 import com.example.app.plugins.di.di
+import com.example.app.plugins.double_receive.configureDoubleReceive
 import com.example.app.plugins.logging.configureRequestLogging
+import com.example.app.plugins.rate_limit.configureRateLimit
 import com.example.app.plugins.routing.configureRouting
 import com.example.app.plugins.serialization.configureSerialization
 import com.example.app.plugins.status_pages.configureStatusPages
@@ -47,5 +49,8 @@ fun Application.module() {
     configureStatusPages()
     configureDatabase()
     configureRequestLogging()
+    configureRateLimit()
+//    configureDoubleReceive()
+
     configureRouting()
 }

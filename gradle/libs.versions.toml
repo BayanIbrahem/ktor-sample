@@ -30,8 +30,10 @@ exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exp
 ktor-server-di = { group = "io.ktor", name = "ktor-server-di", version.ref = "ktor-version" }
 ktor-server-cros = { group = "io.ktor", name = "ktor-server-cors", version.ref = "ktor-version" }
 ktor-network-tsl-certificates = { group = "io.ktor", name = "ktor-network-tls-certificates", version.ref = "ktor-version" }
-ktor-server-call-logging = {group = "io.ktor", name = "ktor-server-call-logging", version.ref = "ktor-version"}
-ktor-server-resources = {group = "io.ktor", name = "ktor-server-resources", version.ref = "ktor-version"}
+ktor-server-call-logging = { group = "io.ktor", name = "ktor-server-call-logging", version.ref = "ktor-version" }
+ktor-server-resources = { group = "io.ktor", name = "ktor-server-resources", version.ref = "ktor-version" }
+ktor-server-rate-limit = { group = "io.ktor", name = "ktor-server-rate-limit", version.ref = "ktor-version" }
+ktor-server-double-receive = {group = "io.ktor", name = "ktor-server-double-receive", version.ref = "ktor-version"}
 
 
 

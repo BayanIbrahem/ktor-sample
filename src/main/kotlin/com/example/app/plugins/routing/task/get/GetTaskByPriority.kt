@@ -9,6 +9,10 @@ import io.ktor.server.routing.get
 
 fun Route.getTaskByPriority(repository: TaskRepository) {
     get("/byPriority/{priority?}") {
+        /**
+         * we can get query params like here without specifying anything in the path
+         * */
+        val someArg = call.request.queryParameters["some_arg"]
         val priority = call.parameters["priority"]?.let { priority ->
             Priority.entries.firstOrNull { it.name == priority }
         }

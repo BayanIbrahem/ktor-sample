@@ -5,6 +5,7 @@ import io.ktor.server.application.createRouteScopedPlugin
 import io.ktor.server.application.install
 import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.request.httpMethod
+import io.ktor.server.request.receive
 import io.ktor.server.request.uri
 import io.ktor.util.logging.KtorSimpleLogger
 import org.slf4j.event.Level
@@ -20,6 +21,8 @@ private val RequestTracePlugin = createRouteScopedPlugin(
 ) {
     onCall { call ->
         LOGGER.trace("Processing call: ${call.request.uri}")
+        // we can not use receive more than once unless we are using double receive
+//        call.receive()
     }
 }
 

@@ -1,31 +1,45 @@
 package com.example.app.plugins.routing
 
+import com.example.app.plugins.rate_limit.PROTECTED_RATE_LIMIT_NAME
 import com.example.app.plugins.routing.form.taskForm
 import com.example.app.plugins.routing.task.taskRouting
 import com.example.data.repository.TaskRepository
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.PartData
+import io.ktor.http.content.forEachPart
 import io.ktor.resources.Resource
 import io.ktor.resources.href
 import io.ktor.resources.serialization.ResourcesFormat
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.plugins.di.dependencies
+import io.ktor.server.plugins.ratelimit.rateLimit
+import io.ktor.server.request.receiveChannel
+import io.ktor.server.request.receiveMultipart
+import io.ktor.server.request.receiveParameters
 import io.ktor.server.resources.Resources
 import io.ktor.server.resources.delete
 import io.ktor.server.resources.get
-import io.ktor.server.resources.post
 import io.ktor.server.resources.put
 import io.ktor.server.response.respondText
+import io.ktor.server.routing.Route
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
+import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
+import io.ktor.util.cio.writeChannel
+import io.ktor.utils.io.copyAndClose
+import java.io.File
+import io.ktor.server.resources.post as rpost
 
 /**
  * routing configurations, we can pass general route
  * we can use nested routing with nested endpoints
  *
- * @see dummyRouting
+ * @see pathConfigurations
  * @see safeRouting
+ * @see otherRouting
+ * @see rateLimitEndpoint
  */
 fun Application.configureRouting() {
 //    like this:
@@ -52,10 +66,11 @@ fun Application.configureRouting() {
         taskForm()
 
 //        dummyRouting()
+
     }
 }
 
-private fun Routing.dummyRouting() {
+private fun Routing.pathConfigurations() {
     get("/sth") {/* single path segment */ }
     get("/sth1/sth2") {/* multiple path segments */ }
     get("/sth1") {
@@ -124,7 +139,7 @@ private fun Routing.safeRouting() {
         // Show a page with fields for creating a new article ...
         call.respondText("Create a new article")
     }
-    post<Articles> {
+    rpost<Articles> {
         // Save an article ...
         call.respondText("An article is saved", status = HttpStatusCode.Created)
     }
@@ -144,4 +159,53 @@ private fun Routing.safeRouting() {
         // Delete an article ...
         call.respondText("An article with id ${article.id} deleted", status = HttpStatusCode.OK)
     }
+}
+
+private fun Route.otherRouting() {
+    // uploading file
+    post("/upload") {
+        val file = File("uploads/ktor_logo.png")
+        call.receiveChannel().copyAndClose(file.writeChannel())
+        call.respondText("A file is uploaded")
+    }
+    // form data
+    post("/signup") {
+        val formParameters = call.receiveParameters()
+        val username = formParameters["username"].toString()
+        call.respondText("The '$username' account is created")
+    }
+    // multipart form data
+    post("/upload") {
+        var fileDescription = ""
+        var fileName = ""
+        val multipartData = call.receiveMultipart(formFieldLimit = 1024 * 1024 * 100)
+
+        multipartData.forEachPart { part ->
+            when (part) {
+                is PartData.FormItem -> {
+                    fileDescription = part.value
+                }
+
+                is PartData.FileItem -> {
+                    fileName = part.originalFileName as String
+                    val file = File("uploads/$fileName")
+                    part.provider().copyAndClose(file.writeChannel())
+                }
+
+                else -> {}
+            }
+            part.dispose()
+        }
+
+        call.respondText("$fileDescription is uploaded to 'uploads/$fileName'")
+    }
+}
+
+fun Route.rateLimitEndpoint() {
+    get("/my_expensive_request") {
+        rateLimit(PROTECTED_RATE_LIMIT_NAME) {
+
+        }
+    }
+
 }
