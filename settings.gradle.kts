@@ -5,8 +5,9 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-include(":authentaction")
+include(":authentication")
 include(":logger:logger-core")
 include(":logger:logger-postgresql")
 include(":test:logger:core")
 include(":test:logger:postgres")
+include(":test:auth:core")
