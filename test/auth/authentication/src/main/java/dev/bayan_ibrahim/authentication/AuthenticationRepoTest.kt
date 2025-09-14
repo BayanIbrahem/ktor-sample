@@ -1,0 +1,3 @@
+package dev.bayan_ibrahim.authentication
+
+class AuthenticationRepoTest

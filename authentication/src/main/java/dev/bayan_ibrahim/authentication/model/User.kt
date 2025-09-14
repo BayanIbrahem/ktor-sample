@@ -1,6 +1,7 @@
 package dev.bayan_ibrahim.authentication.model
 
-import java.time.Instant
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 interface BaseUser {
     val id: Long
@@ -70,7 +71,7 @@ interface BaseUser {
      * @property timeOffset is the offset of the time zone
      */
     data class Metadata(
-        val createdAt: Instant = Instant.now(),
+        val createdAt: Instant = Clock.System.now(),
         val updatedAt: Instant? = null,
         val locale: String? = null,
         val timezone: String? = null,
