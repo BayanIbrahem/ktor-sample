@@ -1,4 +1,4 @@
-package dev.bayan_ibrahim.authentication.model.privilege
+package dev.bayan_ibrahim.authorization.model.privilege
 
 /**
  * Represents a collection of [Privilege]s.
@@ -7,7 +7,7 @@ package dev.bayan_ibrahim.authentication.model.privilege
  */
 @Suppress("JavaDefaultMethodsNotOverriddenByDelegation")
 data class Privileges(
-    val privileges: Set<Privilege>,
+    val privileges: Set<Privilege> = emptySet(),
 ) : Set<Privilege> by privileges {
     /**
      * Checks if this set of privileges satisfies the given [privilege].

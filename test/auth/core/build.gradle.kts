@@ -5,10 +5,11 @@ plugins {
 
 dependencies {
     testImplementation(project(":authentication"))
+    testImplementation(project(":authorization"))
     // authentication
 
     testApi(libs.junit.jupiter)
     testApi(libs.kotlin.test.junit)
 //    testApi(libs.kotlinx.coroutines.test)
-//    testApi(libs.kotlinx.datetime)
+    testApi(libs.kotlinx.datetime)
 }
