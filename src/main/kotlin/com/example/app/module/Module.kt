@@ -1,20 +1,17 @@
 package com.example.app.module
 
+import com.example.app.plugins.auth.applicationHttpClient
 import com.example.app.plugins.auth.configureAuthentication
 import com.example.app.plugins.database.configureDatabase
 import com.example.app.plugins.di.di
-import com.example.app.plugins.double_receive.configureDoubleReceive
 import com.example.app.plugins.logging.configureRequestLogging
 import com.example.app.plugins.rate_limit.configureRateLimit
 import com.example.app.plugins.routing.configureRouting
 import com.example.app.plugins.serialization.configureSerialization
 import com.example.app.plugins.status_pages.configureStatusPages
 import com.example.app.plugins.websocket.configureWebSocket
+import io.ktor.client.HttpClient
 import io.ktor.server.application.Application
-import io.ktor.server.application.createRouteScopedPlugin
-import io.ktor.server.application.install
-import io.ktor.server.request.uri
-import io.ktor.util.logging.KtorSimpleLogger
 
 /**
  * ## Documentation:
@@ -41,7 +38,13 @@ import io.ktor.util.logging.KtorSimpleLogger
 @Suppress("unused")
 // module can be suspend
 // suspend fun Application.module() {
-fun Application.module() {
+fun Application.module(
+    /**
+     * The client instance is passed to the main module function
+     * to have the capability to create a separate client instance in a server test.
+     */
+    httpClient: HttpClient = applicationHttpClient
+) {
 //    we can read environment configurations using the envi
 //    val port = environment.config.propertyOrNull("ktor.deployment.port")?.getString()
     di()

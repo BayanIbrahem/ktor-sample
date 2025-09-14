@@ -62,6 +62,11 @@ dependencies {
     implementation(libs.ktor.server.auth)
     // jwt tokens:
     implementation(libs.ktor.server.auth.jwt)
+    // cio:
+    implementation(libs.ktor.client.cio)
+    // content negotiation:
+    implementation(libs.ktor.client.content.negotiation)
+
 
 
     testImplementation(libs.ktor.server.test.host)

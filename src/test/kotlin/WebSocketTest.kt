@@ -1,4 +1,3 @@
-import com.example.app.plugins.routing.configureRouting
 import com.example.app.plugins.serialization.configureSerialization
 import com.example.app.plugins.websocket.configureWebSocket
 import com.example.data.repository.FakeTaskRepository
@@ -26,7 +25,7 @@ class WebSocketTest {
         application {
             configureWebSocket()
             configureSerialization()
-            configureRouting(FakeTaskRepository)
+//            configureRouting(FakeTaskRepository)
         }
 
         val client = createClient {
@@ -45,7 +44,9 @@ class WebSocketTest {
             Task("shopping", "Buy the groceries", Priority.High),
             Task("painting", "Paint the fence", Priority.Medium)
         )
-        expectedTasks.forEach(FakeTaskRepository::addTask)
+        expectedTasks.forEach {
+            FakeTaskRepository.addTask(it)
+        }
 
         var actualTasks = emptyList<Task>()
 

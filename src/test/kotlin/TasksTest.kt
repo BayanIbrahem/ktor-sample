@@ -1,6 +1,6 @@
+import com.example.app.module.module
 import com.example.model.Priority
 import com.example.model.Task
-import com.example.app.module
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get

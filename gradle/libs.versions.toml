@@ -2,10 +2,19 @@
 kotlin-version = "2.1.10"
 ktor-version = "3.2.3"
 logback-version = "1.4.14"
+kotlinxDateTime = "0.6.2"
 
 exposed-version = "0.56.0"
 h2-version = "2.3.232"
 postgres-version = "42.7.4"
+agp-version = "8.12.0"
+kotlin = "2.1.10"
+junit-version = "5.4.0"
+runner-version = "1.0.2"
+espresso-core-version = "3.0.2"
+appcompat-v7-version = "28.0.0"
+kotlinx-coroutines = "1.10.2"
+junitJupiterVersion = "5.8.1"
 
 [libraries]
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed-version" }
@@ -14,8 +23,10 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 h2 = { module = "com.h2database:h2", version.ref = "h2-version" }
 json-path = { group = "com.jayway.jsonpath", name = "json-path", version = "2.9.0" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin-version" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor-version" }
 ktor-client-content-negotiation-jvm = { group = "io.ktor", name = "ktor-client-content-negotiation-jvm", version.ref = "ktor-version" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor-version" }
 ktor-network-tsl-certificates = { group = "io.ktor", name = "ktor-network-tls-certificates", version.ref = "ktor-version" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor-version" }
 ktor-server-auth = { group = "io.ktor", name = "ktor-server-auth", version.ref = "ktor-version" }
@@ -24,6 +35,10 @@ ktor-server-call-logging = { group = "io.ktor", name = "ktor-server-call-logging
 ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor-version" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor-version" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor-version" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines"}
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+kotlinx-reactor-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 ktor-server-cros = { group = "io.ktor", name = "ktor-server-cors", version.ref = "ktor-version" }
 ktor-server-di = { group = "io.ktor", name = "ktor-server-di", version.ref = "ktor-version" }
 ktor-server-double-receive = { group = "io.ktor", name = "ktor-server-double-receive", version.ref = "ktor-version" }
@@ -36,7 +51,7 @@ ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref 
 ktor-server-websockets = { group = "io.ktor", name = "ktor-server-websockets", version.ref = "ktor-version" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback-version" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgres-version" }
-
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 
 
 [plugins]

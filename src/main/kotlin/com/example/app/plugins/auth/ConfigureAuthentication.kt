@@ -16,6 +16,7 @@ import io.ktor.server.auth.digest
 import io.ktor.server.auth.form
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
+import io.ktor.server.auth.oauth
 import io.ktor.server.response.respond
 import io.ktor.util.getDigestFunction
 import kotlinx.serialization.Serializable
@@ -28,6 +29,7 @@ const val AUTHENTICATION_DIGEST = "my-digest-auth"
 const val AUTHENTICATION_FORM = "my-form-auth"
 const val AUTHENTICATION_BEARER = "my-bearer-auth"
 const val AUTHENTICATION_JWT = "my-jwt-auth"
+const val AUTHENTICATION_OAUTH = "my-oauth-auth"
 
 /**
  * here we configure authentication,
@@ -109,7 +111,7 @@ fun Application.configureAuthentication() {
             .cached(10, 24, TimeUnit.HOURS)
             .rateLimited(10, 1, TimeUnit.MINUTES)
             .build()
-        jwt {
+        jwt(AUTHENTICATION_JWT) {
             val secret = "secret" // environment.config.property("jwt.secret").getString()
             val issuer = "issuer" // environment.config.property("jwt.issuer").getString()
             val audience = "audience" // environment.config.property("jwt.audience").getString()
@@ -134,6 +136,10 @@ fun Application.configureAuthentication() {
                     null
                 }
             }
+        }
+        oauth(AUTHENTICATION_OAUTH) {
+
+
         }
     }
 }
